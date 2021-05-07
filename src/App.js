@@ -1,56 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CssBaseline } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar/Navbar'
 import Products from './Components/Products/Products'
 import Cart from './Components/Cart/Cart'
+import {useDispatch} from 'react-redux'
 import { commerce } from './lib/Commerce';
 import ProductPage from './Components/ProductPage/ProductPage'
+import {setcartaction} from './Redux/Actions/Actions'
 const App = () => {
+  const dispatch=useDispatch();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState({});
   const [order, setOrder] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
 
-  const fetchProducts = async () => {
-    const { data } = await commerce.products.list();
-
-    setProducts(data);
-    
-  };
-  const fetchCart = async () => {
-    setCart(await commerce.cart.retrieve());
-  };
-
-  const handleAddToCart = async (productId, quantity) => {
-    const item = await commerce.cart.add(productId, quantity);
-
-    setCart(item.cart);
-  };
-
-  const handleUpdateCartQty = async (lineItemId, quantity) => {
-    const response = await commerce.cart.update(lineItemId, { quantity });
-
-    setCart(response.cart);
-  };
-
-  const handleRemoveFromCart = async (lineItemId) => {
-    const response = await commerce.cart.remove(lineItemId);
-
-    setCart(response.cart);
-  };
-
-  const handleEmptyCart = async () => {
-    const response = await commerce.cart.empty();
-
-    setCart(response.cart);
-  };
+  
 
   const refreshCart = async () => {
-    const newCart = await commerce.cart.refresh();
+    //const newCart = await commerce.cart.refresh();
 
-    setCart(newCart);
+    dispatch(setcartaction(await commerce.cart.refresh()))
   };
 
   const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
@@ -65,23 +34,20 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProducts();
-    fetchCart();
-  }, []);
+  
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   return (
     <Router>
       <div style={{ display: 'flex' }}>
         <CssBaseline />
-        <Navbar totalItems={cart.total_items} handleDrawerToggle={handleDrawerToggle} />
+        <Navbar  handleDrawerToggle={handleDrawerToggle} />
         <Switch>
           <Route exact path="/">
-            <Products products={products} onAddToCart={handleAddToCart} handleUpdateCartQty />
+            <Products />
           </Route>
           <Route exact path="/cart">
-            <Cart cart={cart} onUpdateCartQty={handleUpdateCartQty} onRemoveFromCart={handleRemoveFromCart} onEmptyCart={handleEmptyCart} />
+            <Cart/>
           </Route>
           {/* <Route path="/checkout" exact>
             <Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />
