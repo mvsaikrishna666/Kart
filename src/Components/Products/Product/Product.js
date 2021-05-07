@@ -1,27 +1,28 @@
 import React from 'react'
-import {Card, CardActions, CardMedia, CardContent, Typography, IconButton} from '@material-ui/core'
-import {AddShoppingCart} from '@material-ui/icons'
+import {Card, CardActions, CardMedia, CardContent, Typography,Button} from '@material-ui/core'
 import useStyles from './ProductStyles'
-
+import { Link } from "react-router-dom";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 const Product = ({product, onAddToCart}) => {
     const classes=useStyles();
     return (
         <div>
-            <Card className={classes.root}>
-                <CardMedia className={classes.media} image={product.media.source} title={product.name}/>
-                <CardContent>
-                    <div className={classes.CardContent}>
-                        <Typography variant="h5" gutterBottom>
+           <Card className={classes.card}>
+           <Link style={{textDecoration:"none"}} to={`/product/${product.id}`}><CardMedia className={classes.cardimage} image={product.media.source} title={product.name}/>
+                <CardContent className={classes.CardContent}>
+                    
+                        <Typography className={classes.cardtitle} variant="h6" gutterBottom>
                             {product.name}
                         </Typography>
-                        <Typography variant="h5">
+                        <br/>
+                        <Typography variant="body1">
                             {product.price.formatted_with_symbol}
                         </Typography>
-                    </div>
-                <Typography dangerouslySetInnerHTML={{ __html: product.description }} variant="body2" color="textSecondary" component="p" />
-                </CardContent>
-                <CardActions disableSpacing className={classes.CardActions}>
-                    <IconButton aria-label="Addtocart" onClick={()=>onAddToCart(product.id,1)}><AddShoppingCart/></IconButton>
+            
+                
+                </CardContent></Link>
+                <CardActions disableSpacing className={classes.cardActions}>
+                <Button style={{backgroundColor:'rgba(0,179,0,0.1)'}} size="small" onClick={()=>onAddToCart(product.id,1)}><ShoppingCartIcon/></Button>
                 </CardActions>
             </Card>
         </div>

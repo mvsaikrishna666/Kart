@@ -1,0 +1,19 @@
+.productpage{
+    position: absolute;
+    top:15%;
+    left:10%;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5vw;
+}
+
+.imageitem{
+    width:25vw;
+}
+.productimage{
+    width: fit-content;
+}
+.pricebox{
+    position: relative;
+    top:20%
+}
