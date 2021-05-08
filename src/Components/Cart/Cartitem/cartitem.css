@@ -1,0 +1,21 @@
+.cart-item{
+    display:grid;
+    grid-template-columns:1fr 3fr;
+    place-items: center;
+    margin-bottom: 2vh;
+
+}
+
+.not-image{
+    display:flex;
+    flex-direction: column;
+    justify-content:space-between;
+}
+
+.Cardcontent{
+    display:grid;
+    grid-template-columns:3fr 1fr;
+    position:relative;
+    margin: auto;
+}
+

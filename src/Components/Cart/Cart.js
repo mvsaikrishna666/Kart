@@ -6,10 +6,12 @@ import CartItem from './Cartitem/Cartitem';
 import useStyles from './CartStyle';
 import {commerce} from '../../lib/Commerce'
 import {setcartaction} from '../../Redux/Actions/Actions'
+import './Cart.css'
+
 const Cart = ({onUpdateCartQty, onRemoveFromCart }) => {
   const classes = useStyles();
   const dispatch=useDispatch();
-  const reduxcart=useSelector((state)=>state.cart.cart)
+  const cart=useSelector((state)=>state.cart.cart)
   
   const EmptyCart=async ()=>{
     await commerce.cart.empty()
@@ -17,43 +19,43 @@ const Cart = ({onUpdateCartQty, onRemoveFromCart }) => {
   }
   
   const renderEmptyCart = () => (
-    <Container>
-      <div className={classes.toolbar} />
+    <div className="emptycart">
+      
       <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
     <Typography variant="subtitle1">You have no items in your shopping cart,
       <Link className={classes.link} to="/">start adding some</Link>!
     </Typography>
-    </Container>
+    </div>
   );
 
-  if (!reduxcart.line_items) return renderEmptyCart()
+  if (!cart.line_items) return renderEmptyCart()
 
   const renderCart = () => (
-    <>
-      <Grid container spacing={3}>
-        {reduxcart.line_items.map((lineItem) => (
-          <Grid item xs={12} sm={4} key={lineItem.id}>
+    <div className="Cartbox">
+      <div className="Cartlist">
+        {cart.line_items.map((lineItem) => (
+          
             <CartItem item={lineItem} onUpdateCartQty={onUpdateCartQty} onRemoveFromCart={onRemoveFromCart} />
-          </Grid>
+
         ))}
-      </Grid>
-      <div className={classes.cardDetails}>
-        <Typography variant="h4">Subtotal: {reduxcart.subtotal.formatted_with_symbol}</Typography>
+      </div>
+      <div className="Carttotal">
+        <Typography variant="h4">Subtotal: {cart.subtotal.formatted_with_symbol}</Typography>
         <div>
-          <Button className={classes.emptyButton} size="large" type="button" variant="contained" color="secondary" onClick={()=>EmptyCart()}>Empty cart</Button>
-          <Button className={classes.checkoutButton} component={Link} to="/checkout" size="large" type="button" variant="contained" color="primary">Checkout</Button>
+          <Button style={{backgroundColor:'rgba(0,179,0,0.1)'}} className={classes.emptyButton} size="large" type="button"  onClick={()=>EmptyCart()}>Empty cart</Button>
+          <Button style={{backgroundColor:'rgba(24,11,67,0.1)'}} className={classes.checkoutButton} component={Link} to="/checkout" size="large" type="button" >Checkout</Button>
         </div>
       </div>
-    </>
+    </div>
   );
 
-  if(reduxcart.line_items.length){
+  if(cart.line_items.length){
     return (
-      <Container>
+      <div className="cartpage">
       <div className={classes.toolbar} />
       <Typography className={classes.title} variant="h3" gutterBottom>Your Shopping Cart</Typography>
       {renderCart()}
-      </Container>
+      </div>
     )
   }
   else{
